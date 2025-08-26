@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register Demo - Classic Design</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&family=Orbitron:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background: #000;
+  color: white;
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+.dashboard-container {
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+}
+
+#screen {
+  display: block;
+  background: rgba(255,255,255,0.05);
+  padding: 20px 20px;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+}
+
+#screen h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 50px;
+  text-align: center;
+  margin: 10px 0 20px 0;
+}
+
+.language-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  cursor: pointer;
+  font-size: 14px;
+  backdrop-filter: blur(5px);
+  display: flex; /* Changed from 'block' to 'flex' for better alignment with text */
+  align-items: center; /* Added for vertical alignment */
+  gap: 6px; /* Space between icon and text */
+  color: white;
+  z-index: 1000;
+  transition: all 0.2s;
+}
+
+.language-icon:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: rgba(255,255,255,0.05);
+  padding: 15px 20px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 250px; /* Changed width to max-width */
+  width: 80%; /* Added width for responsiveness */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.popup-content h4 {
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.popup-options {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 12px;
+}
+
+.popup-options button {
+  flex: 1;
+  margin: 0 4px;
+  padding: 6px 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  font-size: 13px; /* Added font-size for consistency */
+}
+
+.popup-options button.selected {
+  background: #fff;
+  color: #000;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.popup-actions button {
+  flex: 1;
+  margin: 0 4px;
+  padding: 6px 0;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  font-size: 13px; /* Added font-size for consistency */
+}
+
+.popup-actions .cancel-btn {
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+
+.popup-actions .cancel-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.popup-actions .yes-btn {
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+
+.popup-actions .yes-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Added a back button to navigate to the previous page */
+.back-button-container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.back-button {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #555; /* A darker grey */
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px; /* Slightly rounded for distinction */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 1px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #777;
+}
+
+.back-button:active {
+  transform: scale(0.98);
+}
+
+
+@media (max-width: 600px) {
+  #screen h1 { font-size: 40px; }
+  /* button { font-size: 16px; padding: 12px 60px; } */ /* Removed this, as it might conflict with popup buttons */
+  .language-icon { font-size: 12px; padding: 6px 10px; }
+  .back-button {
+    font-size: 16px;
+    padding: 8px 30px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard-container">
+  <div id="screen">
+    <h1>REGISTER RULES</h1>
+    <p id="content">
+      Welcome!<br>
+      We warmly welcome you to our company. Your journey to success begins here.<br><br>
+      If the leader from whom you learned about our company registers you, then:<br>
+      - They will receive a 500 Taka bonus,<br>
+      - And you will receive 250 Taka from your leader.<br><br>
+      This is completely free income, through which you can earn 1,000 to 2,000 Taka right from the start.<br><br>
+      So don’t wait—register now and take your first step toward success.<br><br>
+      <strong>Your Leader:</strong> Ariyan Khan<br>
+      To register, please provide your name, age, profession, and mobile number to your leader with full details.<br>
+      Therefore, please contact your leader.<br>
+      Afterwards, your leader will register you as a member of our company, and you can start your journey to earning.<br><br>
+      Thank you!
+    </p>
+  </div>
+  <!-- Added a back button here -->
+  <div class="back-button-container">
+    <a href="index.html" class="back-button">Back to Dashboard</a>
+  </div>
+</div>
+
+<div class="language-icon" id="languageBtn" onclick="showPopup()">🌐 Language</div>
+
+<div class="popup-overlay" id="languagePopup">
+  <div class="popup-content">
+    <h4>Select Language</h4>
+    <div class="popup-options">
+      <button id="englishBtn" onclick="chooseLanguage(this)">English</button>
+      <button id="bengaliBtn" onclick="chooseLanguage(this)">বাংলা</button>
+    </div>
+    <div class="popup-actions">
+      <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+      <button class="yes-btn" onclick="applyLanguage()">Yes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const languageBtn = document.getElementById('languageBtn');
+const popupBg = document.getElementById('languagePopup');
+const englishBtn = document.getElementById('englishBtn');
+const bengaliBtn = document.getElementById('bengaliBtn');
+const content = document.getElementById('content');
+
+let selectedLang = 'en'; // Default language
+
+const texts = {
+  en: `Welcome!<br>
+We warmly welcome you to our company. Your journey to success begins here.<br><br>
+If the leader from whom you learned about our company registers you, then:<br>
+- They will receive a 500 Taka bonus,<br>
+- And you will receive 250 Taka from your leader.<br><br>
+This is completely free income, through which you can earn 1,000 to 2,000 Taka right from the start.<br><br>
+So don’t wait—register now and take your first step toward success.<br><br>
+<strong>Your Leader:</strong> Ariyan Khan<br>
+To register, please provide your name, age, profession, and mobile number to your leader with full details.<br>
+Therefore, please contact your leader.<br>
+Afterwards, your leader will register you as a member of our company, and you can start your journey to earning.<br><br>
+Thank you!`,
+  bn: `স্বাগতম!<br>
+আমাদের কোম্পানিতে আপনাকে আন্তরিক শুভেচ্ছা জানাই। আপনার সফলতার যাত্রার প্রথম ধাপ শুরু হচ্ছে এখান থেকেই।<br><br>
+আপনি যার কাছ থেকে আমাদের কোম্পানির সম্পর্কে জেনেছেন, সেই লিডার যদি আপনাকে রেজিস্টার করে দেন, তাহলে:<br>
+- তিনি পাবেন ৫০০ টাকা বোনাস,<br>
+- এবং আপনার লিডার থেকে আপনি ২৫০ টাকা পাবেন।<br><br>
+এটি একদম ফ্রি ইনকাম, যার মাধ্যমে আপনি প্রথম থেকে ১,০০০ থেকে ২,০০০ টাকা পর্যন্ত আয় করতে পারবেন।<br><br>
+তাই দেরি না করে এখনই রেজিস্টার করুন এবং নিজের সাফল্যের পথে প্রথম পদক্ষেপ নিন।<br><br>
+<strong>আপনার লিডার:</strong> Ariyan Khan<br>
+রেজিস্টার করার জন্য অনুগ্রহ করে আপনার নাম, বয়স, পেশা এবং মোবাইল নাম্বার আপনার লিডারকে ডিটেলস সহ দিন।<br>
+সেজন্য লিডারের সাথে যোগাযোগ করুন।<br>
+এরপর আপনার লিডার আপনাকে রেজিস্টার করে আমাদের কোম্পানির সদস্য বানিয়ে দিবেন, এবং আপনি শুরু করতে পারবেন আয়ের পথ।<br><br>
+ধন্যবাদ!`
+};
+
+function showPopup() {
+  popupBg.style.display = 'flex';
+  // Ensure the correct button is selected based on current selectedLang
+  if (selectedLang === 'en') {
+    englishBtn.classList.add('selected');
+    bengaliBtn.classList.remove('selected');
+  } else {
+    bengaliBtn.classList.add('selected');
+    englishBtn.classList.remove('selected');
+  }
+}
+function closePopup() {
+  popupBg.style.display = 'none';
+}
+function chooseLanguage(btn) {
+  if(btn.id === 'englishBtn') selectedLang = 'en';
+  else selectedLang = 'bn';
+
+  englishBtn.classList.remove('selected');
+  bengaliBtn.classList.remove('selected');
+  btn.classList.add('selected');
+}
+function applyLanguage() {
+  content.innerHTML = texts[selectedLang];
+  // Set the "REGISTER RULES" title based on selected language
+  document.querySelector('#screen h1').textContent = selectedLang === 'en' ? 'REGISTER RULES' : 'রেজিস্টার নিয়মাবলী';
+  closePopup();
+}
+
+// Initial content load based on default language
+window.onload = function() {
+  applyLanguage(); // This will set the initial content and title
+};
+</script>
+</body>
+</html>
